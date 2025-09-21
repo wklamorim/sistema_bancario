@@ -15,7 +15,7 @@ class Historico:
             {
                 "tipo": transacao.__class__.__name__,
                 "valor": transacao.valor,
-                "data": datetime.now().strftime("%d-%m-%Y %H:%M:%s"),
+                "data": datetime.now().strftime("%d-%m-%Y %H:%M:%s")
             }
         )
 
@@ -47,8 +47,11 @@ class Deposito(Transacao):
 
 
 class Saque(Transacao):
+    contador = 0
+
     def __init__(self, valor):
         self._valor = valor
+        Saque.contador += 1
 
     @property
     def valor(self):
@@ -118,16 +121,13 @@ class Conta:
 
 
 class ContaCorrente(Conta):
-    contador = 0
-
     def __init__(self, numero, cliente, limite=500, limite_saques=3):
         super().__init__(numero, cliente)
         self.limite = limite
         self.limite_saques = limite_saques
-        ContaCorrente.contador += 1
 
     def sacar(self, valor):
-        numero_saques = 0  # TODO (calcular numero de saques)
+        numero_saques = Saque.contador
 
         if numero_saques > self.limite_saques:
             print('Excedeu a quantidade de saques por dia!')
